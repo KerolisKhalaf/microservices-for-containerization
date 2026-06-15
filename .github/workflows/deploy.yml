@@ -10,18 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker build -t keroliskhalaf1/react-microservices-test -f client/Dockerfile.dev ./client
+      
+      - run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+      
+      - run: docker build -t keroliskhalaf1/react-microservices-test -f client/Dockerfile.dev .
       - run: docker run -e CI=true keroliskhalaf1/react-microservices-test npm run test
 
-      - run: docker build -t keroliskhalaf1/server-microservices ./server
-      - run: docker build -t keroliskhalaf1/worker-microservices ./worker
-      - run: docker build -t keroliskhalaf1/client-microservices ./client
-      - run: docker build -t keroliskhalaf1/nginx-microservices ./nginx
+      - run: docker build -t keroliskhalaf1/server-microservices -f server/Dockerfile .
+      - run: docker build -t keroliskhalaf1/worker-microservices -f worker/Dockerfile .
+      - run: docker build -t keroliskhalaf1/client-microservices -f client/Dockerfile .
+      - run: docker build -t keroliskhalaf1/nginx-microservices -f nginx/Dockerfile .
 
       - run: docker push keroliskhalaf1/server-microservices
       - run: docker push keroliskhalaf1/worker-microservices
       - run: docker push keroliskhalaf1/client-microservices
       - run: docker push keroliskhalaf1/nginx-microservices
-
-
