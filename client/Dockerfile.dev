@@ -2,10 +2,10 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY client/package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY client .
 
-CMD ["npm","start"]
+CMD ["npm","run","start"]
